@@ -1,0 +1,49 @@
+# Environments
+.venv/
+.venv_ml/
+env/
+venv/
+ENV/
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+video/node_modules/
+video/build/
+
+# Python Cache & Testing
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Sensitive & Secret Configuration
+.env
+cookies.txt
+new_cookies.txt
+*.key
+*.pem
+
+# Logs
+*.log
+backend.log
+worker.log
+vite.log
+
+# Temporary Raw Recording Frames
+deliverables/recording_raw/
+deliverables/recordings_test/
+deliverables/preview_*.jpg
+
+# OS Metadata
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.freebuff/
+.github/

@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentinel-frontend
+  labels:
+    app: sentinel-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sentinel-frontend
+  template:
+    metadata:
+      labels:
+        app: sentinel-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: sentinel-frontend:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sentinel-frontend
+spec:
+  selector:
+    app: sentinel-frontend
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sentinel-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls:
+    - hosts:
+        - sentinel.gujarat.gov.in
+      secretName: sentinel-tls
+  rules:
+    - host: sentinel.gujarat.gov.in
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: sentinel-backend
+                port:
+                  number: 8000
+          - path: /ws
+            pathType: Prefix
+            backend:
+              service:
+                name: sentinel-backend
+                port:
+                  number: 8000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sentinel-frontend
+                port:
+                  number: 80
